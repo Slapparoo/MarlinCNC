@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>MarlinCNC by Slapparoo</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>MarlinCNC</h1>
+        <h2>CNC focused firmware based on Marlin. SDcard and LCD support. It works on Gen6, Ultimaker, RAMPS and Sanguinololu</h2>
+        <a href="https://github.com/Slapparoo/MarlinCNC" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="cnc-forused-firmware-based-on-marlin" class="anchor" href="#cnc-forused-firmware-based-on-marlin"><span class="octicon octicon-link"></span></a>CNC forused firmware based on Marlin</h1>
+
+<p>This will give the support for all the boards Marlin supports, and allow</p>
+
+<ul>
+<li>LCD Support</li>
+<li>More Axis</li>
+<li>or more steppers per axis</li>
+</ul><h2>
+<a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>I originally created this branch so I could use a Mega2560/Ramps 1.4 combo for my CNC. Which would allow me to have 2 steppers for my Y-Axis and run from SD card using the LCD interface - i.e I no longer have to plug it into a computer.</p>
+
+<h2>
+<a name="goals" class="anchor" href="#goals"><span class="octicon octicon-link"></span></a>Goals</h2>
+
+<ul>
+<li>The firmware will still function as a 3D printer firmware and still accept updates/bug fixes from the main Marlin branch. So no code will be removed, the removes will be logical using #define's and #ifdef etc. </li>
+<li>Include new code paths which are specific to CNC.</li>
+<li>Allow for PIN remapping so existing 3D printer boards like RAMPS and be used, for stepper control, spindle control etc.</li>
+<li>Include all the gcode support currently in GRBL</li>
+<li>include all the '$' commands currently in GRBL</li>
+</ul><h2>
+<a name="from-marlin--" class="anchor" href="#from-marlin--"><span class="octicon octicon-link"></span></a>From Marlin -&gt;</h2>
+
+<p>This firmware is a mashup between Sprinter, grbl and many original parts.
+ (<a href="https://github.com/kliment/Sprinter">https://github.com/kliment/Sprinter</a>)
+ (<a href="https://github.com/simen/grbl/tree">https://github.com/simen/grbl/tree</a>)</p>
+
+<p>Features:</p>
+
+<ul>
+<li>Interrupt based movement with real linear acceleration</li>
+<li>High steprate</li>
+<li>Look ahead (Keep the speed high when possible. High cornering speed)</li>
+<li>Interrupt based temperature protection</li>
+<li>preliminary support for Matthew Roberts advance algorithm 
+For more info see: <a href="http://reprap.org/pipermail/reprap-dev/2011-May/003323.html">http://reprap.org/pipermail/reprap-dev/2011-May/003323.html</a>
+</li>
+</ul><p>This firmware is optimized for gen6 electronics.</p>
+
+<p>The default baudrate is 250000. 
+This gives less communication errors then regular baudrates.</p>
+
+<h1></h1>
+
+<p>Configuring and compilation</p>
+
+<p>Install the arduino software version 0018
+   <a href="http://www.arduino.cc/en/Main/Software">http://www.arduino.cc/en/Main/Software</a></p>
+
+<p>Install the sanguino software, version 0018
+   <a href="http://sanguino.cc/useit">http://sanguino.cc/useit</a></p>
+
+<p>Install pronterface
+   <a href="https://github.com/kliment/Printrun">https://github.com/kliment/Printrun</a></p>
+
+<p>Copy the Marlin firmware
+   https:/github.com/ErikZalm/Marlin
+   (Use the download button)</p>
+
+<p>Start the arduino IDE.
+Select Tools -&gt; Board -&gt; Sanguino 
+Select the correct serial port in Tools -&gt;Serial Port
+Open Marlin.pde</p>
+
+<p>Change the printer specific setting in Configuration.h to the correct values.</p>
+
+<p>The following values are the most important:</p>
+
+<ul>
+<li>float axis_steps_per_unit[]....         // Set the correct steps / mm in the corresponding field</li>
+<li>const bool ENDSTOPS_INVERTING = false;  // Change if only positive moves are executed</li>
+<li>#define INVERT_x_DIR true               // Change if the motor direction is wrong</li>
+</ul><p>Click the Upload button
+If all goes well the firmware is uploading</p>
+
+<p>Start pronterface</p>
+
+<p>Select the correct Serial Port. Type 250000 in the baudrate field.
+Press the Connect button</p>
+
+<h1></h1>
+
+<p>Known issues</p>
+
+<p>On some systems we get compilation errors.</p>
+
+<p>This is caused by the "wiring_serial.c" and "wiring.c".
+The simple fix is to delete these files but this may have a performance impact.</p>
+
+<p>The best workaround is to move these files to sanguino directory. 
+(".../arduino-0018/hardware/Sanguino/cores/arduino/" on windows systems)</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/Slapparoo/MarlinCNC/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/Slapparoo/MarlinCNC/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/Slapparoo/MarlinCNC"></a> is maintained by <a href="https://github.com/Slapparoo">Slapparoo</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
